@@ -1,0 +1,5 @@
+{
+  "name": "CricScore Pro",
+  "description": "A professional, mobile-first cricket scoring application with real-time tracking, strike rotation, and match statistics.",
+  "requestFramePermissions": []
+}

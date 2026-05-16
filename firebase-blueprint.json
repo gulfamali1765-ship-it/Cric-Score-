@@ -1,0 +1,124 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the application, either a player, team manager, or tournament arranger.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["player", "manager", "arranger", "admin"] },
+        "playerUniqueId": { "type": "string" },
+        "category": { "type": "string" },
+        "isBiddingRegistered": { "type": "boolean" },
+        "photoURL": { "type": "string" },
+        "specialization": { "type": "string", "enum": ["batter", "bowler", "all-rounder"] },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "matches": { "type": "number" },
+            "runs": { "type": "number" },
+            "balls": { "type": "number" },
+            "wickets": { "type": "number" },
+            "fours: { "type": "number" },
+            "sixes: { "type": "number" },
+            "fifties": { "type": "number" },
+            "centuries": { "type": "number" },
+            "bowlingRuns": { "type": "number" },
+            "bowlingBalls": { "type": "number" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "role"]
+    },
+    "Team": {
+      "title": "Team",
+      "description": "A cricket team managed by a user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "teamId": { "type": "string" },
+        "managerUid": { "type": "string" },
+        "playerIds": { "type": "array", "items": { "type": "string" } },
+        "tournamentId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "managerUid"]
+    },
+    "Tournament": {
+      "title": "Tournament",
+      "description": "A tournament created by an arranger.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "arrangerUid": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["setup", "ongoing", "completed"] },
+        "maxTeams": { "type": "number" },
+        "overs": { "type": "number" },
+        "playersPerTeam": { "type": "number" },
+        "stages": { "type": "array", "items": { "type": "object" } },
+        "currentStageId": { "type": "string" },
+        "teamIds": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Match": {
+      "title": "Match",
+      "description": "A match within a tournament stage.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "tournamentId": { "type": "string" },
+        "stageId": { "type": "string" },
+        "name": { "type": "string" },
+        "team1Id": { "type": "string" },
+        "team2Id": { "type": "string" },
+        "status": { "type": "string", "enum": ["scheduled", "live", "completed"] },
+        "winnerId": { "type": "string" },
+        "overs": { "type": "number" },
+        "playersPerTeam": { "type": "number" },
+        "innings": { "type": "object" },
+        "currentInnings": { "type": "number" },
+        "tossWinnerId": { "type": "string" },
+        "tossDecision": { "type": "string" }
+      }
+    },
+    "PointTable": {
+      "title": "PointTable",
+      "description": "Points table for a tournament stage.",
+      "type": "object",
+      "properties": {
+        "tournamentId": { "type": "string" },
+        "stageId": { "type": "string" },
+        "entries": { "type": "array", "items": { "type": "object" } }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and career stats."
+    },
+    "/teams/{teamId}": {
+      "schema": "Team",
+      "description": "Team rosters and management."
+    },
+    "/tournaments/{tournamentId}": {
+      "schema": "Tournament",
+      "description": "Tournament details and current stage information."
+    },
+    "/tournaments/{tournamentId}/matches/{matchId}": {
+      "schema": "Match",
+      "description": "Matches within a tournament."
+    },
+    "/tournaments/{tournamentId}/pointTables/{stageId}": {
+      "schema": "PointTable",
+      "description": "Standings for each stage of the tournament."
+    }
+  }
+}
